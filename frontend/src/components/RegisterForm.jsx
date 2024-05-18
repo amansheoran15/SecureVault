@@ -3,6 +3,7 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import SignInWithGoogle from "./SignInWithGoogle.jsx";
+import {Link} from "react-router-dom";
 export default function RegisterForm(){
     const { register, handleSubmit, formState : {errors}, getValues } = useForm();
 
@@ -84,7 +85,7 @@ export default function RegisterForm(){
             </div>
             <SignInWithGoogle/>
             <div id="sign-in" className="text-center w-full max-w-md text-gray-500 text-md mt-4">
-                Already have an account? <a className="text-blue-600 underline cursor-pointer">Sign In</a>
+                Already have an account? <Link to="/sign-in" className="text-blue-600 underline cursor-pointer">Sign In</Link>
             </div>
         </div>
     );

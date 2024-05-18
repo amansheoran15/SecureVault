@@ -3,16 +3,19 @@ import { useState } from 'react'
 import './App.css'
 
 import Login from "./pages/Login.jsx";
-import RegisterForm from "./components/RegisterForm.jsx";
 import Register from "./pages/Register.jsx";
+import {Route, Routes} from "react-router-dom";
+import NoMatch from "./pages/NoMatch.jsx";
 
 function App() {
 
   return (
     <>
-      {/*<div className="text-4xl font-serif text-center mt-10"> Initial commit for MyLocker </div>*/}
-      {/*  <Login></Login>*/}
-        <Register />
+        <Routes>
+            <Route path="/sign-in" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="*" element={<NoMatch />}></Route>
+        </Routes>
     </>
   )
 }

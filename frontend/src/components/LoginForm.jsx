@@ -4,6 +4,7 @@ import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { HiMail } from "react-icons/hi";
 import { FaKey, FaGoogle } from "react-icons/fa";
 import SignInWithGoogle from "./SignInWithGoogle.jsx";
+import {Link} from "react-router-dom";
 
 export default function LoginForm(props) {
     return<div className="flex flex-col items-center justify-center h-screen w-4/5 m-auto">
@@ -36,7 +37,7 @@ export default function LoginForm(props) {
         </div>
         <SignInWithGoogle/>
         <div id="register" className="text-right w-full max-w-md text-gray-500 text-sm mt-1">
-            Are you new? <a className="text-blue-600 underline cursor-pointer">Create an account</a>
+            Are you new? <Link to="/register" className="text-blue-600 underline cursor-pointer">Create an account</Link>
         </div>
     </div>
 }
