@@ -21,7 +21,7 @@ export default function CardList({ editable }){
 
     ];
     return (
-        <div className="overflow-x-auto max-w-5xl mx-auto">
+        <div className="w-full overflow-x-auto max-w-5xl mx-auto">
             <Table hoverable>
                 <Table.Head>
                     <Table.HeadCell>S. No.</Table.HeadCell>
