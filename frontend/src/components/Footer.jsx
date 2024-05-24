@@ -5,6 +5,8 @@ import { Footer } from "flowbite-react";
 import {Link} from "react-router-dom"
 
 export default function FooterComponent() {
+    const date = new Date();
+    const year = date.getFullYear();
     return (
         <Footer container>
             <div className="w-full text-center">
@@ -22,7 +24,7 @@ export default function FooterComponent() {
                 {/*</div>*/}
                 {/*<Footer.Divider />*/}
                 <Link to="/">
-                    <Footer.Copyright by="MyLocker™" year={2024} />
+                    <Footer.Copyright by="MyLocker™" year={year} />
                 </Link>
             </div>
         </Footer>
