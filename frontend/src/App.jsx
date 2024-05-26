@@ -9,6 +9,7 @@ import NoMatch from "./pages/NoMatch.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import ViewCard from "./pages/ViewCard.jsx";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Dashboard />}></Route>
             <Route path="/sign-in" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
+            <Route path="/list" element={<ViewCard />}></Route>
             <Route path="*" element={<NoMatch />}></Route>
         </Routes>
 
