@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import SignInWithGoogle from "./SignInWithGoogle.jsx";
 import {Link} from "react-router-dom";
