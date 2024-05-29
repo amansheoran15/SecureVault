@@ -4,7 +4,9 @@ import { Table } from "flowbite-react";
 import { MdDeleteOutline } from "react-icons/md";
 import { BiSolidEdit } from "react-icons/bi";
 import { FaEye } from "react-icons/fa";
-import {Fa0} from "react-icons/fa6";
+import EditMoneyCard from "./EditMoneyCard.jsx";
+import {useState} from "react";
+
 
 export default function CardList({ editable }){
     const cards = [
@@ -23,6 +25,8 @@ export default function CardList({ editable }){
         },
 
     ];
+    const [openModal, setOpenModal] = useState(false);
+    console.log("re-render");
     return (
         <div className="overflow-x-auto max-w-5xl mx-auto w-full">
             <Table hoverable>
@@ -54,15 +58,17 @@ export default function CardList({ editable }){
                                 </Table.Cell>
                                 <Table.Cell>{card.category}</Table.Cell>
                                 <Table.Cell className = "flex text-lg">
-                                    <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ">
+                                    <span className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 cursor-pointer">
                                         <FaEye/>
-                                    </a>
+                                    </span>
 
                                     { editable &&
                                     (<>
-                                        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3">
+                                        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3"  onClick={() => setOpenModal(true)}>
                                         <BiSolidEdit />
                                         </a>
+                                        <EditMoneyCard openModal={openModal} setOpenModal={setOpenModal}/>
+
                                         <a href="#" className="font-medium text-red-600 hover:underline dark:text-cyan-500 ml-3">
                                             <MdDeleteOutline />
                                         </a>
