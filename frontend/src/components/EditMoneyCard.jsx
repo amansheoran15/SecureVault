@@ -6,6 +6,7 @@ import { RiVisaLine } from "react-icons/ri";
 import { FaCcMastercard } from "react-icons/fa6";
 import {get, useForm} from "react-hook-form";
 import {useState} from "react";
+import encrypt from "./encrypt.jsx";
 
 
 export default function EditMoneyCard({ openModal, setOpenModal }) {
@@ -15,8 +16,9 @@ export default function EditMoneyCard({ openModal, setOpenModal }) {
 
     const card = watch("card_no") === undefined ? "" : watch("card_no");
     const date = watch("expiry_date") === undefined ? "" : watch("expiry_date");
-    const onSubmitCallback = (data)=>{
-        console.log(data);
+    const onSubmitCallback = (data)=> {
+        // console.log(data);
+        encrypt(JSON.stringify(data));
     }
     const handleCardDisplay = () => {
         const rawText = [...card.split(' ').join('')] // Remove old space
@@ -33,7 +35,7 @@ export default function EditMoneyCard({ openModal, setOpenModal }) {
         if (e.target.value === '' || re.test(e.target.value)) {
             // setCard(e.target.value)
             setValue("card_no", e.target.value)
-            console.log(e.target.value)
+            // console.log(e.target.value)
         }
     }
     const handleExpiryDate = () => {
