@@ -33,7 +33,6 @@ export default function EditMoneyCard({ openModal, setOpenModal }) {
         if (e.target.value === '' || re.test(e.target.value)) {
             // setCard(e.target.value)
             setValue("card_no", e.target.value)
-            console.log(e.target.value)
         }
     }
     const handleExpiryDate = () => {
