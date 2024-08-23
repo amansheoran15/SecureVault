@@ -1,5 +1,6 @@
-import {arrayBufferToHexString} from "./UtilityFunctions.jsx";
+// import {arrayBufferToHexString} from "./UtilityFunctions.jsx";
 import decrypt from "./decrypt.jsx";
+import {script} from "./script.jsx";
 
 function ab2str(buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
@@ -17,27 +18,30 @@ function str2ab(str) {
 async function generateAKey() {
     const aesKey = await window.crypto.subtle.generateKey(
         {name: "AES-CBC", length: 128}, // Algorithm using this key
-        true,                           // Allow it to be exported
+        false,                           // Allow it to be exported
         ["encrypt", "decrypt"]          // Can use for these purposes
     )
 
-    const aesKeyBuffer = await window.crypto.subtle.exportKey('raw', aesKey);
+    // const aesKeyBuffer = await window.crypto.subtle.exportKey('raw', aesKey);
 
-    return aesKeyBuffer;
+    return aesKey;
 }
 
 async function encrypt(data){
-    const aesKeyBytes = await generateAKey();
+    let aesKey = await generateAKey();
     // console.log(aesKeyBytes);
     data = str2ab(data);
 
-    const aesKey = await window.crypto.subtle.importKey(
-        "raw",
-        aesKeyBytes,
-        {name: "AES-CBC", length: 128},
-        true,
-        ["encrypt", "decrypt"]
-    )
+    // const aesKey = await window.crypto.subtle.importKey(
+    //     "raw",
+    //     aesKeyBytes,
+    //     {name: "AES-CBC", length: 128},
+    //     false,
+    //     ["encrypt", "decrypt"]
+    // )
+    aesKey = await script(aesKey, "aman");
+    aesKey = aesKey.key;
+
 
     const iv = window.crypto.getRandomValues(new Uint8Array(16));
     const result = await window.crypto.subtle.encrypt(
@@ -50,7 +54,7 @@ async function encrypt(data){
     // const blob = new Blob([iv, new Uint8Array(result)], {type: "application/octet-stream"});
     // console.log(blob);
 
-    const decryptedData = await decrypt(aesKeyBytes, [iv, new Uint8Array(result)]);
+    const decryptedData = await decrypt(aesKey, [iv, new Uint8Array(result)]);
     console.log(ab2str(decryptedData))
 }
 

@@ -14,7 +14,7 @@ function App() {
   return (
       <>
           <Header/>
-          <ViewIDCard />
+          {/*<ViewIDCard />*/}
           <Routes>
               <Route path="/" element={<Dashboard/>}></Route>
               <Route path="/sign-in" element={<Login/>}></Route>
