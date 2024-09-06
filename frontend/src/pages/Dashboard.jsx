@@ -23,7 +23,7 @@ export default function Dashboard() {
                     </CardComponent>
 
                     <CardComponent heading={"ID Cards"} image={IdCard}>
-                        <Link to="/view">
+                        <Link to="/list">
                             <Button label="View Cards" type="dark"></Button>
                         </Link>
                         <Link to="/addForm">
