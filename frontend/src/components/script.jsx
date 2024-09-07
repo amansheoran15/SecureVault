@@ -8,13 +8,11 @@ export async function script(aesKeyBytes, username) {
         console.log("Opened");
         const key = await keyStore.saveKey(aesKeyBytes, username);
 
-        const getkey = await keyStore.getKey("name", username);
-        return getkey;
-
+        return key;
+        // const getkey = await keyStore.getKey("name", username);
+        // return getkey;
     }catch (e) {
         console.log("Error");
     }
-
-
 }
 

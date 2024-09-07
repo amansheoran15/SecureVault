@@ -23,7 +23,6 @@ async function generateAKey() {
     )
 
     // const aesKeyBuffer = await window.crypto.subtle.exportKey('raw', aesKey);
-
     return aesKey;
 }
 

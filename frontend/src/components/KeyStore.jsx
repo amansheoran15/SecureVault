@@ -1,5 +1,4 @@
 class KeyStore{
-
     constructor() {
         "use strict";
         let self = this;
@@ -58,7 +57,6 @@ class KeyStore{
 
                 var objectStore = transaction.objectStore(self.objectStoreName);
                 var request = objectStore.add(savedObject);
-
             });
         };
 
