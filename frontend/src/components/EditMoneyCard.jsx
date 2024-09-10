@@ -6,7 +6,7 @@ import { RiVisaLine } from "react-icons/ri";
 import { FaCcMastercard } from "react-icons/fa6";
 import {get, useForm} from "react-hook-form";
 import {useState} from "react";
-import encrypt from "./encrypt.jsx";
+import {getKey, encrypt} from "./UtilityFunctions.jsx";
 
 
 export default function EditMoneyCard({ openModal, setOpenModal }) {
@@ -16,10 +16,16 @@ export default function EditMoneyCard({ openModal, setOpenModal }) {
 
     const card = watch("card_no") === undefined ? "" : watch("card_no");
     const date = watch("expiry_date") === undefined ? "" : watch("expiry_date");
-    const onSubmitCallback = (data)=> {
-        // console.log(data);
-        encrypt(JSON.stringify(data));
+    const onSubmitCallback = async (data)=> {
+        console.log(data);
+        // encrypt(JSON.stringify(data));
+        const aesKey = await getKey("dinesh@gmail.com");
+        console.log(aesKey);
+
+        const encryptedData = await encrypt(aesKey, JSON.stringify(data));
+        console.log(encryptedData);
     }
+
     const handleCardDisplay = () => {
         const rawText = [...card.split(' ').join('')] // Remove old space
         const creditCard = [] // Create card as array

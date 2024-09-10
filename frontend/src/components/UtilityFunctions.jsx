@@ -30,26 +30,32 @@ export async function encrypt(aesKey, data){
     const iv = window.crypto.getRandomValues(new Uint8Array(16));
     const result = await window.crypto.subtle.encrypt(
         {name: "AES-CBC", iv: iv},
-        aesKey,
+        aesKey.key,
         new Uint8Array(data)
     );
 
-    return result;
+    // const decryptedData = await decrypt(aesKey, ab2str(iv), ab2str(result));
+    // console.log("Decrypted: ", decryptedData);
+
+    return {
+        "Data": ab2str(result),
+        "iv": ab2str(iv)
+    };
 }
 
-export async function decrypt(aesKey, iv, jsonData) {
-    const blobData = new Uint8Array(jsonData);
+export async function decrypt(aesKey, iv, data) {
+    const blobData = new Uint8Array(str2ab(data));
 
     const result= await window.crypto.subtle.decrypt(
-        {name: "AES-CBC", iv: iv},
-        aesKey,
+        {name: "AES-CBC", iv: str2ab(iv)},
+        aesKey.key,
         blobData
     )
 
-    return result;
+    return JSON.parse(ab2str(result));
 }
 
-export async function getKey(aesKeyBytes, username){
+export async function getKey(username){
     let keyStore = new KeyStore();
     try{
         await keyStore.open()
