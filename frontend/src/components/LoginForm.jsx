@@ -13,7 +13,16 @@ export default function LoginForm(props) {
     const { register, handleSubmit, formState : {errors}, getValues } = useForm();
 
     const onSubmitCallback = async (formData) => {
-        console.log(formData);
+        try {
+            // console.log(formData);
+            const { data } = await axios.post(`http://localhost:3000/api/user/login`, formData, {
+                withCredentials: true
+            });
+            console.log("Login Successful")
+        } catch (error) {
+            // console.error("Error occurred during registration:", error);
+            console.error("Response data:", error.response.data.msg);
+        }
     };
 
     return<div className="flex flex-col items-center justify-center h-screen w-4/5 m-auto">
