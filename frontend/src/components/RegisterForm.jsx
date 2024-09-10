@@ -4,16 +4,31 @@ import { Button, Label, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import SignInWithGoogle from "./SignInWithGoogle.jsx";
 import {Link} from "react-router-dom";
+import axios from "axios"
+import {generateAKey, saveKey} from "./UtilityFunctions.jsx";
+
 export default function RegisterForm(){
     const { register, handleSubmit, formState : {errors}, getValues } = useForm();
 
-    const onSubmitCallback = (data)=>{
-        console.log(data);
-    }
+    const onSubmitCallback = async (formData) => {
+        try {
+            // console.log(formData);
+            const { data } = await axios.post(`http://localhost:3000/api/user/register`, formData, {
+                withCredentials: true
+            });
+
+            let aesKey = await generateAKey();
+            const key = await saveKey(aesKey, data.user.email);
+
+            console.log(key);
+        } catch (error) {
+            // console.error("Error occurred during registration:", error);
+            console.error("Response data:", error.response.data.msg);
+        }
+    };
 
     // console.log(errors);
     const password = getValues("password");
-
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">

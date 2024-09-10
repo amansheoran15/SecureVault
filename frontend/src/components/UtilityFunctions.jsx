@@ -1,3 +1,74 @@
+import KeyStore from "./KeyStore.jsx";
+
+export function ab2str(buf) {
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+}
+
+export function str2ab(str) {
+    var buf = new ArrayBuffer(str.length); // 2 bytes for each char
+    var bufView = new Uint8Array(buf);
+    for (var i=0, strLen=str.length; i<strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
+}
+
+export async function generateAKey() {
+    const aesKey = await window.crypto.subtle.generateKey(
+        {name: "AES-CBC", length: 128}, // Algorithm using this key
+        false,                           // Allow it to be exported
+        ["encrypt", "decrypt"]          // Can use for these purposes
+    )
+
+    // const aesKeyBuffer = await window.crypto.subtle.exportKey('raw', aesKey);
+    return aesKey;
+}
+
+export async function encrypt(aesKey, data){
+    data = str2ab(data);
+
+    const iv = window.crypto.getRandomValues(new Uint8Array(16));
+    const result = await window.crypto.subtle.encrypt(
+        {name: "AES-CBC", iv: iv},
+        aesKey,
+        new Uint8Array(data)
+    );
+
+    return result;
+}
+
+export async function decrypt(aesKey, iv, jsonData) {
+    const blobData = new Uint8Array(jsonData);
+
+    const result= await window.crypto.subtle.decrypt(
+        {name: "AES-CBC", iv: iv},
+        aesKey,
+        blobData
+    )
+
+    return result;
+}
+
+export async function getKey(aesKeyBytes, username){
+    let keyStore = new KeyStore();
+    try{
+        await keyStore.open()
+        return await keyStore.getKey("name", username);
+    }catch (e) {
+        console.log("Error");
+    }
+}
+
+export async function saveKey(aesKeyBytes, username) {
+    let keyStore = new KeyStore();
+    try{
+        await keyStore.open()
+        return await keyStore.saveKey(aesKeyBytes, username);
+    }catch (e) {
+        console.log("Error");
+    }
+}
+
 export function arrayBufferToHexString(arrayBuffer) {
     var byteArray = new Uint8Array(arrayBuffer);
     var hexString = "";

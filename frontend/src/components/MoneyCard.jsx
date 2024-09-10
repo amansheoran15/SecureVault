@@ -64,7 +64,7 @@ export default function MoneyCard({type, bank, tagline, cardNumber, FirstName, M
                                     <div
                                         className="w-[15%] bg-gray-400 text-center text-2xl text-gray-800 font-bold italic p-0.5 tracking-wider">{cvv}</div>
                                 </div>
-                            </div>
+                        </div>
                     </motion.div>
                 </div>
         </>

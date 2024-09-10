@@ -11,12 +11,12 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
     optionsSuccessStatus: 200
 }))
 
-app.use('/auth', userRouter);
+app.use('/api/user', userRouter);
 
 app.get('/', authenticate,(req, res) => {
     res.send('Welcome to my website!');
