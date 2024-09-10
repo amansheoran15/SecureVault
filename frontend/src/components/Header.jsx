@@ -25,10 +25,32 @@ export default function Header() {
                         <span className="block text-sm">Bonnie Green</span>
                         <span className="block truncate text-sm font-medium">name@flowbite.com</span>
                     </Dropdown.Header>
-                    <Dropdown.Item>Dashboard</Dropdown.Item>
-                    <Dropdown.Item>Settings</Dropdown.Item>
+                    <Link to={"/"}>
+                        <Dropdown.Item>
+                        Dashboard
+                        </Dropdown.Item>
+                    </Link>
+                    <Link to={"/"}>
+                        <Dropdown.Item>
+                            Setting
+                        </Dropdown.Item>
+                    </Link>
                     <Dropdown.Divider />
-                    <Dropdown.Item>Sign out</Dropdown.Item>
+                    <Link to={"/register"}>
+                        <Dropdown.Item>
+                            Register
+                        </Dropdown.Item>
+                    </Link>
+                    <Link to={"/login"}>
+                        <Dropdown.Item>
+                            Sign In
+                        </Dropdown.Item>
+                    </Link>
+                    <Link to={"/"}>
+                        <Dropdown.Item>
+                            Sign Out
+                        </Dropdown.Item>
+                    </Link>
                 </Dropdown>
                 <Navbar.Toggle />
             </div>
