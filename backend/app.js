@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/user');
+const dataRouter = require('./routes/data')
 const {authenticate} = require("./middlewares/auth");
 const cors = require('cors');
 
@@ -17,6 +18,7 @@ app.use(cors({
 }))
 
 app.use('/api/user', userRouter);
+app.use('/api/data', dataRouter);
 
 app.get('/', authenticate,(req, res) => {
     res.send('Welcome to my website!');
