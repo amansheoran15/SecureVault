@@ -16,7 +16,7 @@ export default function Dashboard() {
                     <CardComponent heading={"Money Cards"} image={MoneyCard}>
                         <Link to="/view">
                             <Button label="View Cards" type="dark"></Button>
-                        </Link> `
+                        </Link>
                         <Link to="/addForm">
                             <Button label="Add Card" type="light"></Button>
                         </Link>
