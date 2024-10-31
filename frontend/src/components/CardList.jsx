@@ -26,7 +26,6 @@ export default function CardList({ editable }){
 
     ];
     const [openModal, setOpenModal] = useState(false);
-    console.log("re-render");
     return (
         <div className="overflow-x-auto max-w-5xl mx-auto w-full">
             <Table hoverable>
