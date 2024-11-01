@@ -2,8 +2,25 @@ const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+exports.authCheck = async (req, res) =>{
+    try{
+        const user = await User.findOne({ _id: req.user_id });
+
+        return res.status(200).json({
+            isAuthenticated: true,
+            user
+        })
+    }catch (err){
+        return res.status(500).send({
+            success: false,
+            msg: err.message
+        })
+    }
+}
+
 exports.login = async (req, res) => {
-    {
+    try{
         const {email, password} = req.body;
 
         const user = await User.findOne({
@@ -31,9 +48,7 @@ exports.login = async (req, res) => {
                 sameSite: "none"
             }
 
-
-
-            return res.status(201).cookie('token',token,options).json({
+            return res.status(200).cookie('token',token,options).json({
                 success: true,
                 msg: "Logged in",
                 user,
@@ -45,8 +60,12 @@ exports.login = async (req, res) => {
             success: false,
             msg: "Incorrect Password"
         })
+    }catch (err) {
+        return res.status(500).send({
+            success: false,
+            msg: err.message
+        })
     }
-
 }
 
 exports.logout = async (req, res) => {
@@ -62,7 +81,7 @@ exports.logout = async (req, res) => {
             msg: "Logged out"
         })
     }catch(err){
-        return res.status(401).json({
+        return res.status(500).json({
             success: false,
             msg: err.message
         })
@@ -107,10 +126,10 @@ exports.register = async (req, res) => {
             user,
             token
         })
-    }catch (e) {
+    }catch (err) {
         return res.status(500).send({
             success: false,
-            msg: e
+            msg: err.message
         })
     }
 }
