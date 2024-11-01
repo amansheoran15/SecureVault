@@ -7,45 +7,48 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import ViewCard from './pages/ViewCard.jsx';
-import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from "./hooks/useAuth.js";
-import { useEffect } from "react";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useState, useEffect } from "react";
+import  {useRecoilValue} from "recoil";
 import {authAtom} from "./atoms/authAtom.js";
 
 function App() {
+    const [loading, setLoading] = useState(false);
     const {isAuthenticated} = useRecoilValue(authAtom);
     const { checkAuth } = useAuth();
+
+    useEffect(() => {
+        const authenticate = async () =>{
+            await checkAuth();
+        }
+
+        authenticate();
+        setLoading(true);
+    }, []);
+
+    if(!loading){
+        return <h1>Loading...</h1>
+    }
 
     return (
         <>
             <Header />
             <Routes>
                 <Route path="/sign-in" element={
-                    // <ProtectedRoute>
-                        <Login />
-                    // </ProtectedRoute>
+                    isAuthenticated ? <Dashboard/> : <Login />
                 } />
 
                 <Route path="/register" element={
-                    // <ProtectedRoute>
-                        <Register />
-                    // </ProtectedRoute>
+                    isAuthenticated ? <Dashboard/> : <Register />
                 } />
 
-                {/* Protected Routes */}
                 <Route path="/" element={
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
+                    isAuthenticated ? <Dashboard/> : <Login />
                 } />
                 <Route path="/list" element={
-                    <ProtectedRoute>
-                        <ViewCard />
-                    </ProtectedRoute>
+                        isAuthenticated ? <ViewCard />: <Login/>
                 } />
 
-                {/* Fallback Route */}
                 <Route path="*" element={<NoMatch />} />
             </Routes>
             <Footer />

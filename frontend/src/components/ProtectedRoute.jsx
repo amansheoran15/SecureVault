@@ -5,6 +5,7 @@ import { authAtom } from '../atoms/authAtom';
 import {useEffect} from "react";
 import {useAuth} from "../hooks/useAuth.js";
 
+// useless
 function ProtectedRoute({ children }) {
     const { isAuthenticated } = useRecoilValue(authAtom);
     const location = useLocation(); // Import useLocation to get the current pathname
