@@ -17,6 +17,8 @@ MyLocker is a secure web application designed for storing sensitive information,
 - **State Management**: Recoil for handling global state
 
 ## Application Flow
+![MYLOCKER FlowChart](assets/flowchart.png)
+
 
 ### User Registration
 1. **Input User Data**: User registers with an email and password.
