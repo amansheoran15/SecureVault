@@ -5,8 +5,11 @@ import Button from "../components/Button.jsx"
 import CardList from "../components/CardList.jsx"
 import MoneyCard from "../assets/MoneyCard.png"
 import IdCard from "../assets/IdCard.png"
+import {useState} from "react";
+import AddMoneyCard from "../components/AddMoneyCard.jsx";
 
 export default function Dashboard() {
+    const [openModal, setOpenModal] = useState(false);
     return (
         <>
             <div className="w-full md:w-[90%] m-auto my-2 p-2">
@@ -14,12 +17,11 @@ export default function Dashboard() {
                 <hr className="my-2 h-1 bg-gray-700"/>
                 <div className="flex items-center justify-center gap-4 flex-wrap lg:gap-6 p-6">
                     <CardComponent heading={"Money Cards"} image={MoneyCard}>
-                        <Link to="/view">
+                        <Link to="/list">
                             <Button label="View Cards" type="dark"></Button>
                         </Link>
-                        <Link to="/addForm">
-                            <Button label="Add Card" type="light"></Button>
-                        </Link>
+                        <Button label="Add Card" type="light" onClick={() => setOpenModal(true)}></Button>
+                        <AddMoneyCard openModal={openModal} setOpenModal={setOpenModal}/>
                     </CardComponent>
 
                     <CardComponent heading={"ID Cards"} image={IdCard}>

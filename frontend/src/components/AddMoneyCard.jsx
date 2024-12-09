@@ -7,23 +7,34 @@ import { FaCcMastercard } from "react-icons/fa6";
 import {get, useForm} from "react-hook-form";
 import {useState} from "react";
 import {getKey, encrypt} from "./UtilityFunctions.jsx";
+import {useData} from "../hooks/useData.js";
 
 
-export default function EditMoneyCard({ openModal, setOpenModal }) {
+export default function AddMoneyCard({ openModal, setOpenModal }) {
     // const [card, setCard] = useState('')
     // const [date, setDate] = useState('')
     const { register, handleSubmit, formState : {errors}, getValues, watch, setValue } = useForm({ mode: "onChange"});
 
+    const { createData } = useData();
     const card = watch("card_no") === undefined ? "" : watch("card_no");
     const date = watch("expiry_date") === undefined ? "" : watch("expiry_date");
     const onSubmitCallback = async (data)=> {
         console.log(data);
         // encrypt(JSON.stringify(data));
-        const aesKey = await getKey("dinesh@gmail.com");
+        const aesKey = await getKey("test@gmail.com");
         console.log(aesKey);
 
         const encryptedData = await encrypt(aesKey, JSON.stringify(data));
         console.log(encryptedData);
+
+        const payload = {
+            data: encryptedData.Data,
+            iv: encryptedData.iv,
+            nickname: data.nickname,
+            type: data.type
+        }
+
+        await createData(payload);
     }
 
     const handleCardDisplay = () => {
