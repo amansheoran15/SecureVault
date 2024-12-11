@@ -8,6 +8,7 @@ import AddMoneyCard from "./AddMoneyCard.jsx";
 import {useEffect, useState} from "react";
 import {useData} from "../hooks/useData.js";
 import {decrypt, getKey} from "./UtilityFunctions.jsx";
+import EditMoneyCard from "./EditMoneyCard.jsx";
 
 
 export default function CardList({ editable }){
@@ -17,13 +18,14 @@ export default function CardList({ editable }){
         // setCards([])
         const getData = async () => {
             const res = await fetchData();
-            // console.log("fetch data: ", res.data);
+            console.log("fetch data: ", res);
             const resArr = res.data;
             const aesKey = await getKey("test@gmail.com");
             const data = []
 
             resArr.map(async (card) => {
                 const info = await decrypt(aesKey, card.iv, card.data);
+                info.id = card._id
                 console.log(info);
                 data.push(info)
             })
@@ -48,6 +50,16 @@ export default function CardList({ editable }){
     //
     // ];
     const [openModal, setOpenModal] = useState(false);
+    const [selectedData, setSelectedData] = useState({});
+
+    const handleOpenModal = (data) => {
+        setSelectedData(data);
+        setOpenModal(true);
+    }
+    const handleCloseModal = () => {
+        setSelectedData(null);
+        setOpenModal(false);
+    }
     return (
         <div className="overflow-x-auto max-w-5xl mx-auto w-full">
             <Table hoverable>
@@ -85,10 +97,10 @@ export default function CardList({ editable }){
 
                                     { editable &&
                                     (<>
-                                        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3"  onClick={() => setOpenModal(true)}>
+                                        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3"  onClick={() => handleOpenModal(card)}>
                                         <BiSolidEdit />
                                         </a>
-                                        <AddMoneyCard openModal={openModal} setOpenModal={setOpenModal}/>
+                                        <EditMoneyCard openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal} cardData={selectedData}/>
 
                                         <a href="#" className="font-medium text-red-600 hover:underline dark:text-cyan-500 ml-3">
                                             <MdDeleteOutline />
