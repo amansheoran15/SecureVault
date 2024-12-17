@@ -8,24 +8,26 @@ import {get, useForm} from "react-hook-form";
 import {useState} from "react";
 import {getKey, encrypt} from "./UtilityFunctions.jsx";
 import {useData} from "../hooks/useData.js";
-
+import {useRecoilValue} from "recoil";
+import {authAtom} from "../atoms/authAtom.js";
 
 export default function AddMoneyCard({ openModal, setOpenModal }) {
     // const [card, setCard] = useState('')
     // const [date, setDate] = useState('')
     const { register, handleSubmit, formState : {errors}, getValues, watch, setValue } = useForm({ mode: "onChange"});
+    const { user } = useRecoilValue(authAtom);
 
     const { createData } = useData();
     const card = watch("card_no") === undefined ? "" : watch("card_no");
     const date = watch("expiry_date") === undefined ? "" : watch("expiry_date");
     const onSubmitCallback = async (data)=> {
-        console.log(data);
+        // console.log(data);
         // encrypt(JSON.stringify(data));
-        const aesKey = await getKey("test@gmail.com");
-        console.log(aesKey);
+        const aesKey = await getKey(user.email);
+        // console.log(aesKey);
 
         const encryptedData = await encrypt(aesKey, JSON.stringify(data));
-        console.log(encryptedData);
+        // console.log(encryptedData);
 
         const payload = {
             data: encryptedData.Data,

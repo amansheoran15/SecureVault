@@ -12,11 +12,13 @@ export const useAuth = () => {
     const login = async (credentials) => {
         try {
             const {data} = await axios.post('/user/login', credentials);
+            console.log(data);
             setAuthState({ isAuthenticated: true, user: data.user});
             toast.success('Logged in successfully');
             navigate("/");
         } catch (error) {
-            toast.error('Login failed');
+            toast.error('Login failed: ', error);
+            console.log(error);
         }
     };
 

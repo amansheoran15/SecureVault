@@ -9,57 +9,61 @@ import {useEffect, useState} from "react";
 import {useData} from "../hooks/useData.js";
 import {decrypt, getKey} from "./UtilityFunctions.jsx";
 import EditMoneyCard from "./EditMoneyCard.jsx";
-
+import {useRecoilValue} from "recoil";
+import {authAtom} from "../atoms/authAtom.js";
 
 export default function CardList({ editable }){
+    const { user } = useRecoilValue(authAtom);
     const { fetchData } = useData();
     const [cards, setCards] = useState([]);
-    useEffect(()=>{
-        // setCards([])
-        const getData = async () => {
-            const res = await fetchData();
-            console.log("fetch data: ", res);
-            const resArr = res.data;
-            const aesKey = await getKey("test@gmail.com");
-            const data = []
-
-            resArr.map(async (card) => {
-                const info = await decrypt(aesKey, card.iv, card.data);
-                info.id = card._id
-                console.log(info);
-                data.push(info)
-            })
-            setCards(data)
-        }
-        getData();
-    }, [])
-    // const cards = [
-    //     {
-    //         card_no : "XXXX-XXXX-XXXX-1234",
-    //         category: "Debit Card",
-    //         name: "Rupesh's Debit Card"
-    //     },{
-    //         card_no : "XXXX-XXXX-XXXX-1234",
-    //         category: "Credit Card",
-    //         name: "Rupesh's Debit Card"
-    //     },{
-    //         card_no : "XXXX-XXXX-XXXX-1234",
-    //         category: "Debit Card",
-    //         name: "Rupesh's Debit Card"
-    //     },
-    //
-    // ];
     const [openModal, setOpenModal] = useState(false);
     const [selectedData, setSelectedData] = useState({});
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const res = await fetchData();
+                const resArr = res.data;
+                const aesKey = await getKey(user.email);
+
+                // Use Promise.all to handle async operations in the array
+                const data = await Promise.all(
+                    resArr.map(async (card) => {
+                        const info = await decrypt(aesKey, card.iv, card.data);
+                        return { ...info, id: card._id }; // Return a new object with decrypted info and ID
+                    })
+                );
+
+                setCards(data); // Set state after all decryption is complete
+            } catch (error) {
+                console.error("Error fetching or decrypting data:", error);
+            }
+        };
+
+        getData();
+    }, []);
 
     const handleOpenModal = (data) => {
         setSelectedData(data);
         setOpenModal(true);
     }
     const handleCloseModal = () => {
-        setSelectedData(null);
         setOpenModal(false);
+        setSelectedData(null);
     }
+
+    const updateCard = (cardData) =>{
+        const newCards = cards.map((card) => {
+            if(card.id !== cardData.id){
+                return card;
+            }else{
+                return cardData;
+            }
+        })
+        // console.log(newCards);
+        setCards(newCards);
+    }
+
     return (
         <div className="overflow-x-auto max-w-5xl mx-auto w-full">
             <Table hoverable>
@@ -81,7 +85,7 @@ export default function CardList({ editable }){
                 <Table.Body className="divide-y">
                 {cards.map((card, index) => {
                     return (
-                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                 <Table.Cell>{index + 1}</Table.Cell>
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {card.nickname}
@@ -97,14 +101,14 @@ export default function CardList({ editable }){
 
                                     { editable &&
                                     (<>
-                                        <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3"  onClick={() => handleOpenModal(card)}>
+                                        <div className="font-medium text-cyan-600 hover:underline dark:text-cyan-500 ml-3" onClick={() => handleOpenModal(card)}>
                                         <BiSolidEdit />
-                                        </a>
-                                        <EditMoneyCard openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal} cardData={selectedData}/>
+                                        </div>
+                                        <EditMoneyCard openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal} cardData={selectedData} handleUpdate={updateCard}/>
 
-                                        <a href="#" className="font-medium text-red-600 hover:underline dark:text-cyan-500 ml-3">
+                                        <div className="font-medium text-red-600 hover:underline dark:text-cyan-500 ml-3">
                                             <MdDeleteOutline />
-                                        </a>
+                                        </div>
                                     </>)
                                     }
                                 </Table.Cell>

@@ -1,44 +1,53 @@
-
 "use client";
 
 import {Button, Label, Modal, Select, TextInput} from "flowbite-react";
 import { RiVisaLine } from "react-icons/ri";
 import { FaCcMastercard } from "react-icons/fa6";
 import {get, useForm} from "react-hook-form";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getKey, encrypt} from "./UtilityFunctions.jsx";
 import {useData} from "../hooks/useData.js";
+import {useRecoilValue} from "recoil";
+import {authAtom} from "../atoms/authAtom.js";
 
-
-export default function EditMoneyCard({ openModal, setOpenModal, cardData, handleCloseModal }) {
-
+export default function EditMoneyCard({ openModal, setOpenModal, cardData, handleCloseModal, handleUpdate }) {
+    const { user } = useRecoilValue(authAtom);
     const { updateData } = useData();
-    if(!cardData) return null;
-    // const [card, setCard] = useState('')
-    // const [date, setDate] = useState('')
-    const { register, handleSubmit, formState : {errors}, getValues, watch, setValue } = useForm({
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+        watch,
+        setValue,
+    } = useForm({
         mode: "onChange",
-        defaultValues: {
-            nickname: cardData?.nickname || "",
-            card_no: cardData?.card_no || "",
-            first_name: cardData?.first_name || "",
-            middle_name: cardData?.middle_name || "",
-            last_name: cardData?.last_name || "",
-            expiry_date: cardData?.expiry_date || "",
-            cvv: cardData?.cvv || "",
-        }
     });
+
+    // Reinitialize form when cardData changes
+    useEffect(() => {
+        if (cardData) {
+            reset({
+                nickname: cardData.nickname || "",
+                card_no: cardData.card_no || "",
+                first_name: cardData.first_name || "",
+                middle_name: cardData.middle_name || "",
+                last_name: cardData.last_name || "",
+                expiry_date: cardData.expiry_date || "",
+                cvv: cardData.cvv || "",
+                type: cardData.type || "Debit Card",
+            });
+        }
+    }, [cardData, reset]);
 
     const card = watch("card_no") === undefined ? "" : watch("card_no");
     const date = watch("expiry_date") === undefined ? "" : watch("expiry_date");
-    const onSubmitCallback = async (data)=> {
-        console.log(data);
-        // encrypt(JSON.stringify(data));
-        const aesKey = await getKey("test@gmail.com");
-        console.log(aesKey);
 
+    const onSubmitCallback = async (data)=> {
+        const aesKey = await getKey(user.email);
+        data.id = cardData.id;
         const encryptedData = await encrypt(aesKey, JSON.stringify(data));
-        console.log(encryptedData);
 
         const payload = {
             data: encryptedData.Data,
@@ -48,6 +57,7 @@ export default function EditMoneyCard({ openModal, setOpenModal, cardData, handl
         }
 
         await updateData(cardData.id, payload);
+        handleUpdate(data);
         handleCloseModal();
     }
 
