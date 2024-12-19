@@ -19,13 +19,13 @@ export default function HomePage() {
                 type="money"
                 count={3}
               />
-              <SecureCard
-                title="ID Cards"
-                description="Safely store your identification and membership cards"
-                type="id"
-                count={2}
-              />
-              <div className="w-64 h-64 flex items-center justify-center">
+              {/*<SecureCard*/}
+              {/*  title="ID Cards"*/}
+              {/*  description="Safely store your identification and membership cards"*/}
+              {/*  type="id"*/}
+              {/*  count={2}*/}
+              {/*/>*/}
+              <div className="w-64 h-64 flex items-center justify-center" onClick= {() => {alert("Feature under construction...")}}>
                 <Button variant="outline" size="lg" className="w-full h-full flex flex-col items-center justify-center">
                   <Plus className="w-12 h-12 mb-2" />
                   <span>Add New Category</span>
@@ -35,7 +35,7 @@ export default function HomePage() {
           </div>
           <div className="mt-8">
             <h2 className="text-3xl font-bold tracking-tight mb-4">Recently Added</h2>
-            <EnhancedTable />
+            <EnhancedTable editable={false}/>
           </div>
         </div>
       </main>

@@ -24,6 +24,8 @@ import {useData} from "../hooks/useData.js";
 import {useRecoilValue} from "recoil";
 import {authAtom} from "../atoms/authAtom.js";
 import MoneyCard from "./MoneyCard.jsx";
+import EditMoneyCard from "./EditMoneyCard.jsx";
+import { Loader } from './ui/Loader'
 
 // const recentItems = [
 //   {
@@ -100,21 +102,27 @@ function CardDetails({ card }) {
 }
 
 export function EnhancedTable({ cardType, searchTerm, editable = false }) {
-  const { user } = useRecoilValue(authAtom);
-  const [cards, setCards] = useState([]);
+  const { user} = useRecoilValue(authAtom);
   const { fetchData } = useData();
-  const filteredItems = cards;
+  const [cards, setCards] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedData, setSelectedData] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  // const filteredItems = useMemo(() => {
-  //   return cards.filter(item => {
-  //     const matchesType = !cardType ||
-  //       (cardType === 'money' && ['Credit Card', 'Debit Card'].includes(item.category)) ||
-  //       (cardType === 'id' && item.category === 'ID Card');
-  //     const matchesSearch = !searchTerm ||
-  //       item.nickname.toLowerCase().includes(searchTerm.toLowerCase());
-  //     return matchesType && matchesSearch;
-  //   });
-  // }, [cardType, searchTerm]);
+  // const filteredItems = cards;
+  const filteredItems = useMemo(() => {
+    return cards.filter(item => {
+      if(!cardType && !searchTerm)
+        return true;
+
+      const matchesType = !cardType ||
+        (cardType === 'money' && ['Credit Card', 'Debit Card'].includes(item.type)) ||
+        (cardType === 'id' && item.category === 'ID Card');
+      const matchesSearch = !searchTerm ||
+        item.nickname.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesType && matchesSearch;
+    });
+  }, [cards, cardType, searchTerm]);
 
   useEffect(() => {
     const getData = async () => {
@@ -123,22 +131,49 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
         const resArr = res.data;
         const aesKey = await getKey(user.email);
 
-        // Use Promise.all to handle async operations in the array
         const data = await Promise.all(
-            resArr.map(async (card) => {
+            resArr.map(async card => {
               const info = await decrypt(aesKey, card.iv, card.data);
-              return { ...info, id: card._id }; // Return a new object with decrypted info and ID
+              return { ...info, id: card._id };
             })
         );
 
-        setCards(data); // Set state after all decryption is complete
+        setCards(data);
       } catch (error) {
         console.error("Error fetching or decrypting data:", error);
+      } finally {
+        setLoading(false); // Ensure loading is set to false after data fetch
       }
     };
 
     getData();
-  }, []);
+  }, [fetchData, user.email]); // Add `user` to the dependency array
+
+  const handleOpenModal = (data) => {
+    setSelectedData(data);
+    setOpenModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedData(null);
+  }
+
+  const updateCard = (cardData) =>{
+    const newCards = cards.map((card) => {
+      if(card.id !== cardData.id){
+        return card;
+      }else{
+        return cardData;
+      }
+    })
+    // console.log(newCards);
+    setCards(newCards);
+  }
+
+  if(loading){
+    return <Loader />
+  }
 
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
@@ -178,22 +213,37 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
                         <DialogTitle>Card Details</DialogTitle>
                         <DialogDescription>View your card information</DialogDescription>
                       </DialogHeader>
-                      <CardDetails card={item} />
-                      {/*<MoneyCard />*/}
+                      {/*<CardDetails card={item} />*/}
+                      <MoneyCard
+                          type={item.cardType}
+                          bank="SecureVault Bank"
+                          tagline="Your Secure Financial Partner"
+                          cardNumber={item.card_no}
+                          FirstName={item.first_name}
+                          MiddleName={item.middle_name}
+                          LastName={item.last_name}
+                          validThru={{
+                            month: item.expiry_date.split('/')[0],
+                            year: item.expiry_date.split('/')[1]
+                          }}
+                          cvv={item.cvv}
+                      />
                     </DialogContent>
                   </Dialog>
                   {
                     editable && (
                         <>
-                          <Button variant="ghost" size="icon" className="hover:bg-primary/20">
+                          <Button variant="ghost" size="icon" className="hover:bg-primary/20" onClick={() => handleOpenModal(item)}>
                             <Pencil className="h-4 w-4 text-primary" />
                           </Button>
+
                           <Button variant="ghost" size="icon" className="hover:bg-destructive/20">
-                          <Trash className="h-4 w-4 text-destructive" />
+                            <Trash className="h-4 w-4 text-destructive" />
                           </Button>
                         </>
                       )
                   }
+                  <EditMoneyCard openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal} cardData={selectedData} handleUpdate={updateCard}/>
                 </div>
               </TableCell>
             </TableRow>

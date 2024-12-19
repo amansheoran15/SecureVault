@@ -1,8 +1,9 @@
 import { Github, Linkedin } from 'lucide-react'
 import { motion } from 'framer-motion'
-
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card"
+import amanpic from "../assets/amanksheoran.png"
+import dineshpic from "../assets/dineshkumar2.jpg"
 
 function CreatorCard({ name, role, image, github, linkedin }) {
   return (
@@ -41,7 +42,6 @@ function CreatorCard({ name, role, image, github, linkedin }) {
     </motion.div>
   )
 }
-
 function ContactCard({ name, role, image, github, linkedin }) {
   return (
     <motion.div
@@ -79,28 +79,37 @@ function ContactCard({ name, role, image, github, linkedin }) {
 }
 
 export default function ContactPage() {
-  const creator = {
-    name: "John Doe",
-    role: "Lead Developer",
-    image: "/placeholder.svg?height=400&width=400",
-    github: "https://github.com/johndoe",
-    linkedin: "https://linkedin.com/in/johndoe"
-  }
+  const creator = [
+    {
+      name: "Dinesh Kumar",
+      role: "Full Stack Developer",
+      image: dineshpic,
+      github: "https://github.com/DineshK3012/",
+      linkedin: "https://www.linkedin.com/in/dinesh-kumar-06ab741ba/"
+    },
+    {
+      name: "Aman Kumar Sheoran",
+      role: "Backend Developer",
+      image: amanpic,
+      github: "https://github.com/amansheoran15",
+      linkedin: "https://www.linkedin.com/in/amansheoran/"
+    }
+  ]
 
   const contributors = [
     {
-      name: "Jane Smith",
-      role: "UI/UX Designer",
-      image: "/placeholder.svg?height=200&width=200",
-      github: "https://github.com/janesmith",
-      linkedin: "https://linkedin.com/in/janesmith"
+      name: "Dinesh Kumar",
+      role: "Full Stack Developer",
+      image: dineshpic,
+      github: "https://github.com/DineshK3012/",
+      linkedin: "https://www.linkedin.com/in/dinesh-kumar-06ab741ba/"
     },
     {
-      name: "Bob Johnson",
+      name: "Aman Kumar Sheoran",
       role: "Backend Developer",
-      image: "/placeholder.svg?height=200&width=200",
-      github: "https://github.com/bobjohnson",
-      linkedin: "https://linkedin.com/in/bobjohnson"
+      image: amanpic,
+      github: "https://github.com/amansheoran15",
+      linkedin: "https://www.linkedin.com/in/amansheoran/"
     }
   ]
 
@@ -110,16 +119,20 @@ export default function ContactPage() {
       <div className="space-y-12">
         <section>
           <h2 className="text-2xl font-semibold mb-4">Creator</h2>
-          <CreatorCard {...creator} />
-        </section>
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Contributors</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {contributors.map((contributor) => (
-              <ContactCard key={contributor.name} {...contributor} />
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {contributors.map((creator) => (
+                  <CreatorCard key={creator.name} {...creator} />
             ))}
-          </div>
+            </div>
         </section>
+        {/*<section>*/}
+        {/*  <h2 className="text-2xl font-semibold mb-4">Contributors</h2>*/}
+        {/*  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">*/}
+        {/*    {contributors.map((contributor) => (*/}
+        {/*      <ContactCard key={contributor.name} {...contributor} />*/}
+        {/*    ))}*/}
+        {/*  </div>*/}
+        {/*</section>*/}
       </div>
     </div>
   )

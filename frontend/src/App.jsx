@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ThemeProvider from './components/ThemeProvider'
 import SiteHeader from './components/SiteHeader'
 import HomePage from './pages/HomePage'
@@ -14,6 +14,8 @@ import  {useRecoilValue} from "recoil";
 import {authAtom} from "./atoms/authAtom.js";
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
+
+import ViewCard from './pages/ViewCard.jsx';
 
 function App() {
     const [loading, setLoading] = useState(false);
@@ -32,19 +34,6 @@ function App() {
     if(!loading){
         return <Loader />
     }
-    // const [loading, setLoading] = useState(true);
-
-    // // Simulate loader finish after 5 seconds
-    // useEffect(() => {
-    //   const timer = setTimeout(() => setLoading(false), 5000);
-    //   return () => clearTimeout(timer);
-    // }, []);
-
-    // return (
-    //   <div>
-    //     <Loader isLoading={loading} />
-    //   </div>
-    // );
 
     return (
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
@@ -62,9 +51,12 @@ function App() {
 
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/profile" element={isAuthenticated ? <ProfilePage /> : <Login />} />
                     <Route path="/cards" element={ isAuthenticated ? <ViewCardsPage />: <Login/>} />
                     <Route path="*" element={<NotFoundPage />} />
+                    <Route path="/list" element={
+                        isAuthenticated ? <ViewCard />: <Login/>
+                } />
                 </Routes>
             </div>
         </ThemeProvider>
@@ -72,7 +64,6 @@ function App() {
 }
 
 export default App
-
 
 // import './App.css';
 // import Login from './pages/Login.jsx';

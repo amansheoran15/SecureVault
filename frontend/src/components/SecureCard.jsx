@@ -10,8 +10,12 @@ import {
   CardFooter,
   CardTitle,
 } from "./ui/card"
+import AddMoneyCard from "./AddMoneyCard.jsx";
+import {useState} from "react";
 
 export function SecureCard({ title, description, type, count = 0 }) {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <Card className="relative overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
       <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 transition-opacity duration-300 ease-in-out opacity-50 hover:opacity-75 pointer-events-none" />
@@ -35,7 +39,7 @@ export function SecureCard({ title, description, type, count = 0 }) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between pt-4">
-        <Link to={`/cards/${type}`}>
+        <Link to={`/cards/`}>
           <Button 
             variant="outline" 
             className="transition-all duration-300 ease-in-out hover:bg-primary hover:text-primary-foreground cursor-pointer"
@@ -45,10 +49,12 @@ export function SecureCard({ title, description, type, count = 0 }) {
         </Link>
         <Button
           className="transition-all duration-300 ease-in-out hover:bg-primary hover:text-primary-foreground cursor-pointer"
+          onClick={() => setOpenModal(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
           Add New
         </Button>
+        <AddMoneyCard openModal={openModal} setOpenModal={setOpenModal}/>
       </CardFooter>
     </Card>
   )
