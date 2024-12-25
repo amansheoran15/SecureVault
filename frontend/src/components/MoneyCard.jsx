@@ -29,9 +29,9 @@ export default function MoneyCard({type, bank, tagline, cardNumber, FirstName, M
                             className="flip-card-front flex flex-col gap-4 justify-between max-w-md min-h-[265px] w-[100%] h-[100%] mx-auto shadow-lg overflow-hidden bg-gradient-to-tr from-slate-900 to-slate-700 rounded-lg py-3 p-6">
                             <div className="flex justify-between gap-2 items-center">
                                 <div className="flex justify-start gap-2 items-center flex-1">
-                                    <h1 className="text-white font-bold text-3xl">{bank}</h1>
+                                    <h1 className="text-white font-bold text-2xl">{bank}</h1>
                                     <p className="text-gray-400 text-3xl">l</p>
-                                    <span className="text-gray-400 text-2xl font-semibold">{tagline}</span>
+                                    <span className="text-gray-400 text-md font-semibold">{tagline}</span>
                                 </div>
                             </div>
                             <img src={CardChip} className="w-14 h-10" alt="card chip"/>
@@ -49,9 +49,9 @@ export default function MoneyCard({type, bank, tagline, cardNumber, FirstName, M
                                         <span
                                             className="bg-gradient-to-tr from-gray-50 via-gray-400 to-gray-50 bg-clip-text text-transparent text-md font-bold">{validThru.month}/{validThru.year}</span>
                                     </div>
-                                    <p className="font-bold uppercase text-2xl mb-2 bg-gradient-to-tr from-gray-50 via-gray-400 to-gray-50 bg-clip-text text-transparent">{FirstName} {MiddleName} {LastName}</p>
                                 </div>
-                                <img src={MasterCard} className="w-24 h-16" alt="Master_Card"/>
+                                    <p className="font-bold uppercase text-2xl mb-2 bg-gradient-to-tr from-gray-50 via-gray-400 to-gray-50 bg-clip-text text-transparent">{FirstName} {MiddleName} {LastName}</p>
+                                {/*<img src={MasterCard} className="w-24 h-16" alt="Master_Card"/>*/}
                             </div>
                         </div>
 

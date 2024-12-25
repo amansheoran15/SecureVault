@@ -11,7 +11,7 @@ const dataSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['credit card', 'Debit Card', 'bank account', 'other'], // Add more types as needed
+        enum: ['Credit Card', 'Debit Card', 'bank account', 'Other'], // Add more types as needed
         required: true
     },
     nickname: {

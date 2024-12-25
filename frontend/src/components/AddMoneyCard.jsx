@@ -25,7 +25,7 @@ import { getKey, encrypt } from './UtilityFunctions.jsx'
 import { useData } from '../hooks/useData.js'
 import { authAtom } from '../atoms/authAtom.js'
 
-export default function AddMoneyCard({ openModal, setOpenModal }) {
+export default function AddMoneyCard({ openModal, setOpenModal, handleRefresh }) {
     const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm({ mode: "onChange" })
     const { user } = useRecoilValue(authAtom)
     const { createData } = useData()
@@ -36,6 +36,7 @@ export default function AddMoneyCard({ openModal, setOpenModal }) {
     const onSubmitCallback = async (data) => {
         const aesKey = await getKey(user.email)
         const encryptedData = await encrypt(aesKey, JSON.stringify(data))
+        console.log(data);
 
         const payload = {
             data: encryptedData.Data,
@@ -43,9 +44,9 @@ export default function AddMoneyCard({ openModal, setOpenModal }) {
             nickname: data.nickname,
             type: data.type
         }
-
-        await createData(payload)
-        setOpenModal(false)
+        const result = await createData(payload)
+        setOpenModal(false);
+        handleRefresh((prev) => prev + 1);
     }
 
     const handleCardDisplay = () => {
@@ -113,11 +114,12 @@ export default function AddMoneyCard({ openModal, setOpenModal }) {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="type">Card Type</Label>
-                            <Select onValueChange={(value) => setValue('type', value)} defaultValue="Debit Card">
-                                <SelectTrigger id="type">
+                            <Select defaultValue="Select Card" onValueChange={(value) => setValue("type", value)}>
+                                <SelectTrigger id="type" {...register("type")}>
                                     <SelectValue placeholder="Select card type" />
                                 </SelectTrigger>
                                 <SelectContent>
+                                    <SelectItem value="Select Card">Select Type</SelectItem>
                                     <SelectItem value="Debit Card">Debit Card</SelectItem>
                                     <SelectItem value="Credit Card">Credit Card</SelectItem>
                                 </SelectContent>

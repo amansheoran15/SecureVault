@@ -11,10 +11,15 @@ import {
   CardTitle,
 } from "./ui/card"
 import AddMoneyCard from "./AddMoneyCard.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export function SecureCard({ title, description, type, count = 0 }) {
   const [openModal, setOpenModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  useEffect(() => {
+    //handling refresh
+  }, [refreshKey]);
 
   return (
     <Card className="relative overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
@@ -54,7 +59,7 @@ export function SecureCard({ title, description, type, count = 0 }) {
           <Plus className="mr-2 h-4 w-4" />
           Add New
         </Button>
-        <AddMoneyCard openModal={openModal} setOpenModal={setOpenModal}/>
+        <AddMoneyCard openModal={openModal} setOpenModal={setOpenModal} handleRefresh={setRefreshKey}/>
       </CardFooter>
     </Card>
   )

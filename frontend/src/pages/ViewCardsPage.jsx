@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import { EnhancedTable } from "../components/EnhancedTable"
 import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
@@ -8,7 +8,12 @@ import AddMoneyCard from "../components/AddMoneyCard.jsx"
 
 export default function ViewCardsPage() {
   const [filter, setFilter] = useState({ category: 'all', search: '' })
-  const [openAddModal, setOpenAddModal] = useState(false)
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0)
+
+    useEffect(() => {
+            //handling refresh
+    }, [refreshKey]);
 
   const handleCategoryChange = (value) => {
     setFilter(prev => ({ ...prev, category: value }))
@@ -50,7 +55,7 @@ export default function ViewCardsPage() {
         <div className="mt-8 flex justify-center">
           <Button onClick={() => setOpenAddModal(true)}>Add New Card</Button>
         </div>
-        <AddMoneyCard openModal={openAddModal} setOpenModal={setOpenAddModal}/>
+        <AddMoneyCard openModal={openAddModal} setOpenModal={setOpenAddModal} handleRefresh={setRefreshKey}/>
       </div>
   )
 }

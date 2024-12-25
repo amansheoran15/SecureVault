@@ -12,9 +12,9 @@ exports.createData = async (req, res) => {
             nickname: nickname || ''  // nickname is optional
         });
         await sensitiveData.save();
-        res.status(201).json({ message: 'Data saved successfully', sensitiveData });
+        res.status(201).json({ success: true, message: 'Data saved successfully', sensitiveData });
     } catch (error) {
-        res.status(500).json({ message: 'Error saving data', error });
+        res.status(500).json({ success: false, message: 'Error saving data', error });
     }
 };
 

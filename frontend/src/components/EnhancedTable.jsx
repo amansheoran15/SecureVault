@@ -147,7 +147,7 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
     };
 
     getData();
-  }, [fetchData, user.email]); // Add `user` to the dependency array
+  }, []); // Add `user` to the dependency array
 
   const handleOpenModal = (data) => {
     setSelectedData(data);
@@ -216,7 +216,7 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
                       {/*<CardDetails card={item} />*/}
                       <MoneyCard
                           type={item.cardType}
-                          bank="SecureVault Bank"
+                          bank="SecureVault"
                           tagline="Your Secure Financial Partner"
                           cardNumber={item.card_no}
                           FirstName={item.first_name}
