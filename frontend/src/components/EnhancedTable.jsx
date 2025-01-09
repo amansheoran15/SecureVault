@@ -103,7 +103,7 @@ function CardDetails({ card }) {
 
 export function EnhancedTable({ cardType, searchTerm, editable = false }) {
   const { user} = useRecoilValue(authAtom);
-  const { fetchData } = useData();
+  const { fetchData, deleteData } = useData();
   const [cards, setCards] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
@@ -169,6 +169,16 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
     })
     // console.log(newCards);
     setCards(newCards);
+  }
+
+  const deleteCard = async (cardID) => {
+    try{
+      await deleteData(cardID);
+      setCards((prevCards) => prevCards.filter((card) => card.id !== cardID));
+
+    }catch (e) {
+
+    }
   }
 
   if(loading){
@@ -237,7 +247,7 @@ export function EnhancedTable({ cardType, searchTerm, editable = false }) {
                             <Pencil className="h-4 w-4 text-primary" />
                           </Button>
 
-                          <Button variant="ghost" size="icon" className="hover:bg-destructive/20">
+                          <Button variant="ghost" size="icon" className="hover:bg-destructive/20" onClick={() => deleteCard(item.id)}>
                             <Trash className="h-4 w-4 text-destructive" />
                           </Button>
                         </>
