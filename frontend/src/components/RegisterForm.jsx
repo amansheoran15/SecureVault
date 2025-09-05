@@ -11,6 +11,7 @@ import { Label } from "./ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
 import { useAuth } from "../hooks/useAuth";
 import SignInWithGoogle from "./SignInWithGoogle";
+import {toast} from "react-toastify";
 
 export default function RegisterForm() {
     const { registerUser } = useAuth();
@@ -25,6 +26,7 @@ export default function RegisterForm() {
             navigate("/");
         } catch (error) {
             console.error('Registration failed:', error);
+            toast.error('Registration failed: ', error);
         } finally {
             setIsLoading(false);
         }

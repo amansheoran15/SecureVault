@@ -1,6 +1,6 @@
-# MyLocker
+# SecureVault
 
-MyLocker is a secure web application designed for storing sensitive information, such as card details, with robust end-to-end security. With AES-256 encryption and client-side data handling, MyLocker ensures that only the user has access to their encrypted data. The app emphasizes user privacy, performing encryption and decryption entirely on the client side, so data remains private even on the server.
+SecureVault is a secure web application designed for storing sensitive information, such as card details, with robust end-to-end security. With AES-256 encryption and client-side data handling, SecureVault ensures that only the user has access to their encrypted data. The app emphasizes user privacy, performing encryption and decryption entirely on the client side, so data remains private even on the server.
 
 ## Features
 - **Secure Storage**: Sensitive information, such as card details, is stored securely using AES-256 encryption.
@@ -17,7 +17,7 @@ MyLocker is a secure web application designed for storing sensitive information,
 - **State Management**: Recoil for handling global state
 
 ## Application Flow
-![MYLOCKER FlowChart](assets/flowchart.png)
+![SECUREVAULT FlowChart](assets/flowchart.png)
 
 
 ### User Registration
